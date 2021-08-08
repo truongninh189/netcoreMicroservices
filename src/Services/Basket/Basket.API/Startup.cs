@@ -10,7 +10,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Basket.API.GrpcServices;
 using Basket.API.Repositories;
+using Discount.Grpc.Protos;
 
 namespace Basket.API
 {
@@ -38,6 +40,9 @@ namespace Basket.API
                 option.Configuration = Configuration.GetValue<string>("CacheSettings:ConnectionString");
             });
 
+            services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(option =>
+                option.Address = new Uri(Configuration["GrpcSettings:DiscountUrl"]));
+            services.AddScoped<DiscountGrpcService>();
             services.AddScoped<IBasketRepository, BasketRepository>();
         }
 
